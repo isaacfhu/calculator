@@ -45,10 +45,14 @@ function del() {
 }
 function onEqualOp() {
   const result = operate(Number(lastNum), Number(currentNum), currentOp);
+  if (typeof result !== "number") {
+    display(result);
+    return;
+  }
+
   const rounded = parseFloat(result.toFixed(10));
   currentNum = rounded;
   display(currentNum);
-
   currentOp = null;
 }
 function display(str) {
@@ -78,6 +82,12 @@ function handleOperator(operator) {
   } else if (operator === "=") onEqualOp();
   else if (currentOp !== null) {
     const result = operate(Number(lastNum), Number(currentNum), currentOp);
+
+    if (typeof result !== "number") {
+      display(result);
+      return;
+    }
+
     const rounded = parseFloat(result.toFixed(10));
 
     display(rounded);
