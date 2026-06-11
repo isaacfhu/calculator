@@ -29,7 +29,7 @@ function operate(a, b, operator) {
           ? multiply(a, b)
           : operator === "/"
             ? divide(a, b)
-            : "ERROR! : Invalid Operator";
+            : "ERROR! : Invalid Operation";
   return result;
 }
 //
@@ -40,12 +40,13 @@ function clear() {
   currentOp = null;
   return;
 }
-function del(str) {
-  return str.slice(0, -1);
+function del() {
+  return displayCalc.textContent.slice(0, -1);
 }
 function onEqualOp() {
   const result = operate(Number(lastNum), Number(currentNum), currentOp);
-  currentNum = result;
+  const rounded = parseFloat(result.toFixed(10));
+  currentNum = rounded;
   display(currentNum);
 
   currentOp = null;
@@ -59,7 +60,7 @@ digits.forEach((button) => {
   button.addEventListener("click", () => {
     if (button.textContent === "Clear") return clear();
     if (button.textContent === "Del") {
-      const newStr = del(currentNum);
+      const newStr = del();
       currentNum = newStr;
       display(currentNum);
       return;
@@ -93,9 +94,11 @@ operatorBtns.forEach((button) => {
     } else if (operator === "=") onEqualOp();
     else if (currentOp !== null) {
       const result = operate(Number(lastNum), Number(currentNum), currentOp);
-      display(result);
+      const rounded = parseFloat(result.toFixed(10));
 
-      lastNum = result;
+      display(rounded);
+
+      lastNum = rounded;
       currentNum = 0;
 
       currentOp = operator;
