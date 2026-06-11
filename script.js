@@ -25,9 +25,9 @@ function operate(a, b, operator) {
       ? add(a, b)
       : operator === "-"
         ? subtract(a, b)
-        : operator === "x"
+        : operator === "x" || operator === "*"
           ? multiply(a, b)
-          : operator === "/"
+          : operator === "/" || operator === "÷"
             ? divide(a, b)
             : "ERROR! : Invalid Operation";
   return result;
@@ -56,6 +56,42 @@ function display(str) {
   return str;
 }
 //
+//
+function handleDigit(value) {
+  if (displayCalc.textContent.includes("ERROR")) return clear();
+  else if (displayCalc.textContent.includes(".") && value === ".") return;
+
+  if (Number(currentNum) !== 0) currentNum = displayCalc.textContent + value;
+  else currentNum = value;
+
+  console.log(lastNum, currentNum);
+  display(currentNum);
+}
+function handleOperator(operator) {
+  if (displayCalc.textContent.includes("ERROR")) return clear();
+
+  if (currentOp === null) {
+    currentOp = operator;
+
+    lastNum = currentNum;
+    currentNum = 0;
+  } else if (operator === "=") onEqualOp();
+  else if (currentOp !== null) {
+    const result = operate(Number(lastNum), Number(currentNum), currentOp);
+    const rounded = parseFloat(result.toFixed(10));
+
+    display(rounded);
+
+    lastNum = rounded;
+    currentNum = 0;
+
+    currentOp = operator;
+  }
+
+  console.log(currentOp);
+}
+//
+
 digits.forEach((button) => {
   button.addEventListener("click", () => {
     if (button.textContent === "Clear") return clear();
@@ -65,45 +101,33 @@ digits.forEach((button) => {
       display(currentNum);
       return;
     }
-    if (displayCalc.textContent.includes("ERROR")) return clear();
-    else if (
-      displayCalc.textContent.includes(".") &&
-      button.textContent === "."
-    )
-      return;
-
-    if (Number(currentNum) !== 0)
-      currentNum = displayCalc.textContent + button.textContent;
-    else currentNum = button.textContent;
-
-    console.log(lastNum, currentNum);
-    display(currentNum);
+    handleDigit(button.textContent);
   });
 });
 
 operatorBtns.forEach((button) => {
   button.addEventListener("click", () => {
-    if (displayCalc.textContent.includes("ERROR")) return clear();
-    const operator = button.textContent;
-
-    if (currentOp === null) {
-      currentOp = operator;
-
-      lastNum = currentNum;
-      currentNum = 0;
-    } else if (operator === "=") onEqualOp();
-    else if (currentOp !== null) {
-      const result = operate(Number(lastNum), Number(currentNum), currentOp);
-      const rounded = parseFloat(result.toFixed(10));
-
-      display(rounded);
-
-      lastNum = rounded;
-      currentNum = 0;
-
-      currentOp = operator;
-    }
-
-    console.log(currentOp);
+    handleOperator(button.textContent);
   });
+});
+
+document.addEventListener("keydown", (e) => {
+  //console.log(e);
+  if ((e.key >= "0" && e.key <= "9") || e.key === ".")
+    return handleDigit(e.key);
+  if (e.key === "Backspace") {
+    currentNum = del();
+    display(currentNum);
+  }
+  if (
+    e.key === "+" ||
+    e.key === "-" ||
+    e.key === "/" ||
+    e.key === "*" ||
+    e.key === "x"
+  )
+    handleOperator(e.key);
+  if (e.key === "Enter" || e.key === "=") {
+    return handleOperator("=");
+  }
 });
