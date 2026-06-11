@@ -40,6 +40,9 @@ function clear() {
   currentOp = null;
   return;
 }
+function del(str) {
+  return str.slice(0, -1);
+}
 function onEqualOp() {
   const result = operate(Number(lastNum), Number(currentNum), currentOp);
   currentNum = result;
@@ -55,13 +58,24 @@ function display(str) {
 digits.forEach((button) => {
   button.addEventListener("click", () => {
     if (button.textContent === "Clear") return clear();
+    if (button.textContent === "Del") {
+      const newStr = del(currentNum);
+      currentNum = newStr;
+      display(currentNum);
+      return;
+    }
     if (displayCalc.textContent.includes("ERROR")) return clear();
+    else if (
+      displayCalc.textContent.includes(".") &&
+      button.textContent === "."
+    )
+      return;
 
     if (Number(currentNum) !== 0)
       currentNum = displayCalc.textContent + button.textContent;
     else currentNum = button.textContent;
 
-    //console.log(lastNum, currentNum);
+    console.log(lastNum, currentNum);
     display(currentNum);
   });
 });
@@ -87,6 +101,6 @@ operatorBtns.forEach((button) => {
       currentOp = operator;
     }
 
-    //console.log(currentOp);
+    console.log(currentOp);
   });
 });
