@@ -4,6 +4,8 @@ let currentOp = null;
 const displayCalc = document.querySelector(".calc-display");
 const digits = document.querySelectorAll(".calc-digit");
 const operatorBtns = document.querySelectorAll(".operator");
+const delCalc = document.querySelector(".calc-del");
+const clearCalc = document.querySelector(".calc-clear");
 
 // basic math
 function add(a, b) {
@@ -41,7 +43,13 @@ function clear() {
   return;
 }
 function del() {
-  return displayCalc.textContent.slice(0, -1);
+  const newStr = displayCalc.textContent.slice(0, -1);
+  currentNum = newStr;
+  display(currentNum);
+  return newStr;
+}
+function getRounded(num) {
+  return parseFloat(num.toFixed(10));
 }
 function onEqualOp() {
   const result = operate(Number(lastNum), Number(currentNum), currentOp);
@@ -50,7 +58,7 @@ function onEqualOp() {
     return;
   }
 
-  const rounded = parseFloat(result.toFixed(10));
+  const rounded = getRounded(result);
   currentNum = rounded;
   display(currentNum);
   currentOp = null;
@@ -88,7 +96,7 @@ function handleOperator(operator) {
       return;
     }
 
-    const rounded = parseFloat(result.toFixed(10));
+    const rounded = getRounded(result);
 
     display(rounded);
 
@@ -102,15 +110,11 @@ function handleOperator(operator) {
 }
 //
 
+delCalc.addEventListener("click", del);
+clearCalc.addEventListener("click", clear);
+
 digits.forEach((button) => {
   button.addEventListener("click", () => {
-    if (button.textContent === "Clear") return clear();
-    if (button.textContent === "Del") {
-      const newStr = del();
-      currentNum = newStr;
-      display(currentNum);
-      return;
-    }
     handleDigit(button.textContent);
   });
 });
@@ -126,8 +130,8 @@ document.addEventListener("keydown", (e) => {
   if ((e.key >= "0" && e.key <= "9") || e.key === ".")
     return handleDigit(e.key);
   if (e.key === "Backspace") {
-    currentNum = del();
-    display(currentNum);
+    del();
+    return;
   }
   if (
     e.key === "+" ||
