@@ -1,5 +1,6 @@
 body {
   display: flex;
+  background-color: #090202;
   flex-direction: column;
   align-items: center;
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
@@ -15,11 +16,11 @@ body {
   border-radius: 5%;
   flex-direction: column;
   align-items: center;
-  background-color: pink;
+  background-color: #99e2b4;
 }
 .calc-display {
   display: flex;
-  background-color: aquamarine;
+  background-color: #88d4ab;
   min-width: 320px;
   min-height: 100px;
   margin-bottom: 10px;
@@ -58,4 +59,31 @@ body {
 }
 .calc-keys button {
   border-radius: 5%;
+}
+
+.calc-digit {
+  background-color: #f2e2ba;
+  font-weight: bolder;
+}
+
+.operator {
+  background-color: #bad7f2;
+  font-size: 35;
+  font-weight: bold;
+}
+
+.calc-clear,
+.calc-del {
+  background-color: #036666;
+  font-weight: bold;
+}
+
+.large-text {
+  font-size: 30px;
+}
+.pastel-red {
+  background-color: #ff70a6;
+}
+.white-text {
+  color: whitesmoke;
 }
